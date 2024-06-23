@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from 'react';
+import Counter from './Counter'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+  const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
+   useEffect(() => {
+    
+  const intervalId = setInterval(() => {
+    setCurrentTime(new Date().toLocaleTimeString());
+  }, 1000);
+  return () => {
+    clearInterval(intervalId);
+  }
+  })
+  return <div>
+    <h2>Aktuální čas</h2>
+    <p>{currentTime}</p>
+    <Counter />
+  </div>
 }
 
-export default App;
+export default App
