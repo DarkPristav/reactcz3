@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+  const [quote, setQuote] = useState(null)
+  const url = "https://api.kanye.rest/";
+
+  const getQuote = async () => {
+
+    try {
+      const response = await fetch(url)
+      const data = await response.json()
+      setQuote(data.quote)
+    } catch (error) {
+      setQuote('Nepodařilo se načíst citát.')
+    }
+  }
+
+  useEffect(() => {
+    getQuote()
+  }, [])
+
+  if (!quote) {
+    return <h1>Načítání dat...</h1>
+  }
+
+  return <div>
+    <h1>{quote}</h1>
+  </div>
+  
 }
 
-export default App;
+export default App
