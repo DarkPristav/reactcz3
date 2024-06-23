@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import {useState, useEffect } from "react"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+const App = () => {
+  const [state, setState] = useState({
+    name: '',
+    image: '',
+    people: ''
+  })
+  const url = "https://restcountries.com/v3.1/name/ukraine"
+  const countryInfo = async () => {
+    try {
+      const response = await fetch(url)
+      const data = await response.json()
+      console.log(data[0]);
+      setState({
+        name: data[0].capital[0],
+        image: data[0].flags.png,
+        people: (data[0].population / 1000000).toFixed(2)
+      })
+    } catch (error) {
+      console.log('Chyba při načítání dat: ', error);
+    }
+    
+  }
+  useEffect(() => {
+    countryInfo()
+  }, [])
+  const {name, image, people} = state;
+  return <div className='country-box'>
+    <div className="country-info">
+      <h2>{name}</h2>
+      <img src={image} alt={name} />
+      <p>{people} milionů</p>
     </div>
-  );
+  </div>
 }
-
-export default App;
+export default App
