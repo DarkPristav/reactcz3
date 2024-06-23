@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const myHeaders = new Headers();
+myHeaders.append("apikey", "m1YMRjpLiVkbzdAdtEfiAlsceIszXQ2V");
+
+const requestOptions = {
+  method: 'GET',
+  redirect: 'follow',
+  headers: myHeaders
+};
+
+  
+
+
+const App = () => {
+  const [outcome, setOutcome] = useState(0)
+  const [loading, setLoading] = useState(true)
+
+  useEffect( () => {
+  fetch("https://api.apilayer.com/currency_data/convert?to=EUR&from=CZK&amount=100", requestOptions)
+    .then(response => response.json())
+    .then(result => { 
+        setOutcome(result.result)
+        setLoading(false)
+      })
+    .catch(error => console.log('error', error));
+}, [])
+
+  if (loading) {
+   return <h2>Načítání výsledku...</h2>
+  }
+  return <div>
+    <p>{outcome}</p>
+  </div>
 }
 
-export default App;
+export default App
